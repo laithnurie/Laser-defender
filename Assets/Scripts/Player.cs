@@ -16,6 +16,8 @@ public class Player : MonoBehaviour
     float playerWidth;
     float playerHeight;
 
+    Coroutine firingCoroutine;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -56,9 +58,24 @@ public class Player : MonoBehaviour
 
     private void PrepareWeapons()
     {
-        if(Input.GetKeyDown("space"))
+        if (Input.GetKeyDown("space"))
         {
-            Instantiate(bullet, transform.position, transform.rotation);
+            firingCoroutine =  StartCoroutine(FireContinously());
+        }
+
+        if (Input.GetKeyUp("space"))
+        {
+            StopCoroutine(firingCoroutine);
+        }
+    }
+
+
+    IEnumerator FireContinously()
+    {
+        while(true)
+        {
+            Instantiate(bullet, transform.position, Quaternion.identity);
+            yield return new WaitForSeconds(0.1f);
         }
     }
 }
